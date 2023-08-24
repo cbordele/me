@@ -2,7 +2,7 @@
 layout: base
 ---
 
-{% include header.html type="page" %}
+{% include header.html type="base" %}
 
 <div class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}" role="main">
   <div class="row">
@@ -15,10 +15,11 @@ layout: base
         </div>
       {% endif %}
 
-      <div>
-        <h1>Yeah I gave up trying to center this</h1>
-        <script src="../assets/js/pixi.min.js"></script>
-        <script src="../assets/js/testgame.js"></script>
+      <div id="app", class="app-center">
+        <body>
+          <script src="../assets/js/pixi.js"></script>
+          <script src="../assets/js/testgame.js"></script>
+        </body>
       </div>
 
       {% if page.after-content %}
