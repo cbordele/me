@@ -21,7 +21,7 @@ author: Carter Bordeleau
 
 navbar-links:
   About Me: "aboutme"
-  Test game: "pixigame"
+  Test game: "testgame"
   Resources:
     - This site's template: "https://github.com/daattali/beautiful-jekyll"
 

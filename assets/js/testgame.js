@@ -9,10 +9,11 @@ const app = new PIXI.Application({ background: '#000000', resizeTo: appDiv });
 appDiv.appendChild(app.view);
 
 let brushSize = 20;
+let color = getColorSequence(1);
 
 // prepare circle texture, that will be our brush
 const brush = new PIXI.Graphics()
-    .beginFill(getColorSequence(1))
+    .beginFill(color)
     .drawCircle(0, 0, brushSize);
 
 // Create a line that will interpolate the drawn points
@@ -43,7 +44,22 @@ function setup()
     let dragging = false;
     let lastDrawnPoint = null;
     let i = 0;
-    let color = nextColor();
+
+    const keyUp = keyboard("ArrowUp");
+    const keyDown = keyboard("ArrowDown");
+
+    keyUp.press = () => {
+         brushSize = brushSize + 2;
+         brushSet();
+    }
+
+    keyDown.press = () => {
+        brushSize = brushSize - 2;
+        if (brushSize < 2) {
+            brushSize = 2;
+        }
+        brushSet();
+    }
     
 
     function pointerMove({ global: { x, y }})
@@ -88,14 +104,21 @@ function setup()
         dragging = false;
         lastDrawnPoint = null;
         color = nextColor();
-        brush.endFill().beginFill(color)
-        .drawCircle(0, 0, brushSize);
+        brushSet();
     }
 
     function nextColor() {
       i = i + 1;
       return getColorSequence(i);
     }
+
+
+    function brushSet() {
+        brush.clear();
+        brush.beginFill(color)
+        .drawCircle(0, 0, brushSize);
+    }
+
 }
 
 function getColorSequence(n) {
@@ -113,4 +136,51 @@ function RGB2Color(r, g, b) {
   return r*0x010000 + g*0x000100 + b*0x000001
 }
 
+
+function keyboard(value) {
+    const key = {};
+    key.value = value;
+    key.isDown = false;
+    key.isUp = true;
+    key.press = undefined;
+    key.release = undefined;
+    //The `downHandler`
+    key.downHandler = (event) => {
+      if (event.key === key.value) {
+        if (key.isUp && key.press) {
+          key.press();
+        }
+        key.isDown = true;
+        key.isUp = false;
+        event.preventDefault();
+      }
+    };
+  
+    //The `upHandler`
+    key.upHandler = (event) => {
+      if (event.key === key.value) {
+        if (key.isDown && key.release) {
+          key.release();
+        }
+        key.isDown = false;
+        key.isUp = true;
+        event.preventDefault();
+      }
+    };
+  
+    //Attach event listeners
+    const downListener = key.downHandler.bind(key);
+    const upListener = key.upHandler.bind(key);
+    
+    window.addEventListener("keydown", downListener, false);
+    window.addEventListener("keyup", upListener, false);
+    
+    // Detach event listeners
+    key.unsubscribe = () => {
+      window.removeEventListener("keydown", downListener);
+      window.removeEventListener("keyup", upListener);
+    };
+    
+    return key;
+  }
 
