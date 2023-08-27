@@ -2,6 +2,8 @@
 layout: base
 ---
 
+<script src="../assets/js/pixi.js"></script>
+
 {% include header.html type="base" %}
 
 <div class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}" role="main">
@@ -16,9 +18,7 @@ layout: base
       {% endif %}
 
       <div id="app", class="app-center">
-        <body>
-          <script src="../assets/js/pixi.js"></script>
-        </body>
+
       </div>
 
       {% if page.after-content %}
