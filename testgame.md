@@ -1,4 +1,4 @@
 ---
 layout: pixigame
-js: "../assets/js/testgame.js"
+js: "./assets/js/testgame.js"
 ---
